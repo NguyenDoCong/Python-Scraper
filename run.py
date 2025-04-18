@@ -57,25 +57,25 @@ def x_videos_scraper(id = "elonmusk",scrolls = 5):
 
         hrefs = []
         # Cuộn xuống để tải thêm tweets
-        for _ in range(scrolls):
-            print("Scrolling down...")
+        for i in range(scrolls):
+            print(f"Scrolling down... {i}")
             page.mouse.wheel(0, 10000)
             page.wait_for_timeout(3000)
 
-        dataActionValues = page.locator('a').all()
-        for element_handle in dataActionValues:
-            link = element_handle.get_attribute('href')
-            link = "https://x.com"+link
-            if link and "/video/" in link:
-                hrefs.append(link)
-                print(link)
-                with open(Config.X_FILE_PATH, "w",encoding='utf-8') as f:
-                    for item in hrefs:
-                        f.write(f"{item}\n")
+            a_tag_elements = page.locator('a').all()
+            for element in a_tag_elements:
+                link = element.get_attribute('href')
+                link = "https://x.com"+link
+                if link and "/video/" in link and link not in hrefs:
+                    hrefs.append(link)
+                    print(link)
+                    with open(Config.X_FILE_PATH, "w",encoding='utf-8') as f:
+                        for item in hrefs:
+                            f.write(f"{item}\n")
 
         context.close()
         browser.close()
-    batch_download_from_file(Config.X_FILE_PATH)
+    # batch_download_from_file(Config.X_FILE_PATH)
 
 def tiktok_videos_scraper(id = "therock",count = 10):
     from TikTokApi import TikTokApi
@@ -100,7 +100,7 @@ def tiktok_videos_scraper(id = "therock",count = 10):
             with open(Config.TIKTOK_FILE_PATH, "w",encoding='utf-8') as f:
                 for item in videos:
                     f.write(f"{item}\n")
-            # batch_download_from_file(Config.TIKTOK_FILE_PATH)
+            batch_download_from_file(Config.TIKTOK_FILE_PATH)
     asyncio.run(user_example())
 
 def fb_save_cookies():
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     # fb_videos_scraper(id = "official.parkhangseo")
     # ins_videos_scraper(id = "baukrysie")
     # x_videos_scraper(id = "elonmusk", scrolls=10)
-    tiktok_videos_scraper(id = "beatvn_official")
+    tiktok_videos_scraper(id = "beatvn_official", count=10)
     # fb_save_cookies()
     # x_login()
 

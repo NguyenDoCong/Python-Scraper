@@ -1,0 +1,96 @@
+2025-04-17 03:47:49,644 - ERROR - An error occurred while closing cookie term Message: no such element: Unable to locate element: {"method":"css selector","selector":"._42ft._4jy0._al65._4jy3._4jy1.selected._51sy"}
+  (Session info: chrome=135.0.7049.95); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+#0 0x55ebd2e35cea <unknown>
+#1 0x55ebd28e65f0 <unknown>
+#2 0x55ebd2937a33 <unknown>
+#3 0x55ebd2937c21 <unknown>
+#4 0x55ebd2986274 <unknown>
+#5 0x55ebd295d68d <unknown>
+#6 0x55ebd2983660 <unknown>
+#7 0x55ebd295d433 <unknown>
+#8 0x55ebd2929ea3 <unknown>
+#9 0x55ebd292ab01 <unknown>
+#10 0x55ebd2dfab3b <unknown>
+#11 0x55ebd2dfea21 <unknown>
+#12 0x55ebd2de1c32 <unknown>
+#13 0x55ebd2dff594 <unknown>
+#14 0x55ebd2dc5eef <unknown>
+#15 0x55ebd2e23d98 <unknown>
+#16 0x55ebd2e23f76 <unknown>
+#17 0x55ebd2e34b36 <unknown>
+#18 0x7f082f5f6aa4 <unknown>
+#19 0x7f082f683c3c <unknown>
+
+2025-04-17 03:47:57,308 - ERROR - An Error occurred while logging in: Message: 
+Stacktrace:
+#0 0x55ebd2e35cea <unknown>
+#1 0x55ebd28e65f0 <unknown>
+#2 0x55ebd2937a33 <unknown>
+#3 0x55ebd2937c21 <unknown>
+#4 0x55ebd2986274 <unknown>
+#5 0x55ebd295d68d <unknown>
+#6 0x55ebd2983660 <unknown>
+#7 0x55ebd295d433 <unknown>
+#8 0x55ebd2929ea3 <unknown>
+#9 0x55ebd292ab01 <unknown>
+#10 0x55ebd2dfab3b <unknown>
+#11 0x55ebd2dfea21 <unknown>
+#12 0x55ebd2de1c32 <unknown>
+#13 0x55ebd2dff594 <unknown>
+#14 0x55ebd2dc5eef <unknown>
+#15 0x55ebd2e23d98 <unknown>
+#16 0x55ebd2e23f76 <unknown>
+#17 0x55ebd2e34b36 <unknown>
+#18 0x7f082f5f6aa4 <unknown>
+#19 0x7f082f683c3c <unknown>
+
+2025-04-17 03:48:46,111 - ERROR - An Error occurred while adding security code: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//button[@type='submit']"}
+  (Session info: chrome=135.0.7049.95); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+#0 0x55ebd2e35cea <unknown>
+#1 0x55ebd28e65f0 <unknown>
+#2 0x55ebd2937a33 <unknown>
+#3 0x55ebd2937c21 <unknown>
+#4 0x55ebd2986274 <unknown>
+#5 0x55ebd295d68d <unknown>
+#6 0x55ebd2983660 <unknown>
+#7 0x55ebd295d433 <unknown>
+#8 0x55ebd2929ea3 <unknown>
+#9 0x55ebd292ab01 <unknown>
+#10 0x55ebd2dfab3b <unknown>
+#11 0x55ebd2dfea21 <unknown>
+#12 0x55ebd2de1c32 <unknown>
+#13 0x55ebd2dff594 <unknown>
+#14 0x55ebd2dc5eef <unknown>
+#15 0x55ebd2e23d98 <unknown>
+#16 0x55ebd2e23f76 <unknown>
+#17 0x55ebd2e34b36 <unknown>
+#18 0x7f082f5f6aa4 <unknown>
+#19 0x7f082f683c3c <unknown>
+
+2025-04-17 03:48:46,126 - ERROR - An Error occurred while saving browser: Message: no such element: Unable to locate element: {"method":"xpath","selector":"//button[@type='submit']"}
+  (Session info: chrome=135.0.7049.95); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+#0 0x55ebd2e35cea <unknown>
+#1 0x55ebd28e65f0 <unknown>
+#2 0x55ebd2937a33 <unknown>
+#3 0x55ebd2937c21 <unknown>
+#4 0x55ebd2986274 <unknown>
+#5 0x55ebd295d68d <unknown>
+#6 0x55ebd2983660 <unknown>
+#7 0x55ebd295d433 <unknown>
+#8 0x55ebd2929ea3 <unknown>
+#9 0x55ebd292ab01 <unknown>
+#10 0x55ebd2dfab3b <unknown>
+#11 0x55ebd2dfea21 <unknown>
+#12 0x55ebd2de1c32 <unknown>
+#13 0x55ebd2dff594 <unknown>
+#14 0x55ebd2dc5eef <unknown>
+#15 0x55ebd2e23d98 <unknown>
+#16 0x55ebd2e23f76 <unknown>
+#17 0x55ebd2e34b36 <unknown>
+#18 0x7f082f5f6aa4 <unknown>
+#19 0x7f082f683c3c <unknown>
+
+2025-04-17 07:02:01,521 - ERROR - An error occurred: ProfileScraper.extract_videos() missing 1 required positional argument: 'self'

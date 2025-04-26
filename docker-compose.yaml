@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    # volumes:
+    #   - data_test:/usr/src/app
+    # command: >
+    #   sh -c "python3 ./run.py"
+    # environment:
+    #   - DEBUG=True
+
+# volumes:
+#   data_test:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       device: .
+#       o: bind

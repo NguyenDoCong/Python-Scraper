@@ -16,7 +16,7 @@ def ins_videos_scraper(id = "baukrysie"):
 
 def x_login():
     from playwright.sync_api import sync_playwright
-    from config import Config
+    # from config import Config
 
     username = Config.X_USERNAME
     password = Config.X_PASSWORD
@@ -51,7 +51,7 @@ def x_videos_scraper(id = "elonmusk",scrolls = 5):
         page = context.new_page() 
 
         # Truy cập trang cá nhân
-        page.goto(f"https://x.com/{id}/media")
+        page.goto(f"https://x.com/{id}/media", timeout=15000)
 
         page.wait_for_timeout(5000)  # chờ page load
 
@@ -59,23 +59,31 @@ def x_videos_scraper(id = "elonmusk",scrolls = 5):
         # Cuộn xuống để tải thêm tweets
         for i in range(scrolls):
             print(f"Scrolling down... {i}")
-            page.mouse.wheel(0, 10000)
-            page.wait_for_timeout(3000)
+            old_links = set(hrefs)
+                
+            # Cuộn bằng JS
+            page.evaluate("window.scrollBy(0, document.body.scrollHeight)")
+            page.wait_for_timeout(5000)
 
-            a_tag_elements = page.locator('a').all()
-            for element in a_tag_elements:
-                link = element.get_attribute('href')
-                link = "https://x.com"+link
-                if link and "/video/" in link and link not in hrefs:
-                    hrefs.append(link)
-                    print(link)
-                    with open(Config.X_FILE_PATH, "w",encoding='utf-8') as f:
+            # Kiểm tra tất cả <a> sau khi load
+            for element in page.locator("a").all():
+                link = element.get_attribute("href")
+                if link and "/video/" in link:
+                    full_link = f"https://x.com{link}"
+                    if full_link not in hrefs:
+                        hrefs.append(full_link)
+                        print(full_link)
+
+            if set(hrefs) == old_links:
+                break
+                    
+        with open(Config.X_FILE_PATH, "w",encoding='utf-8') as f:
                         for item in hrefs:
                             f.write(f"{item}\n")
 
         context.close()
         browser.close()
-    # batch_download_from_file(Config.X_FILE_PATH)
+    batch_download_from_file(Config.X_FILE_PATH)
 
 def tiktok_videos_scraper(id = "therock",count = 10):
     from TikTokApi import TikTokApi
@@ -83,12 +91,15 @@ def tiktok_videos_scraper(id = "therock",count = 10):
     import os
     # import json
     from config import Config
-
+    ms_token = os.environ.get(
+    "ms_token", None
+    )  # set your own ms_token, think it might need to have visited a profile
+    ms_token = Config.MS_TOKENS
+    
     async def user_example():
         async with TikTokApi() as api:
             # Đổi ms_tokens nếu bị lỗi chạy headless
-            ms_tokens = ['SN3ux8ZLm7INM9Sho3QfVsbnFZVUA8MlqJCvd-IvzK1I8WbybviyNpPR-YLsIIRNZSdMxKIzn2TBf5AIyl8IDQypBnq-879Fetx5TIEpAqO0Ff0WA2pToXQBRIBxdORP5TrVSEW7XMklt65fpVPwoa4=']
-            await api.create_sessions(ms_tokens=ms_tokens, num_sessions=1, sleep_after=3, browser=os.getenv("TIKTOK_BROWSER", "chromium"))
+            await api.create_sessions(ms_tokens=ms_token, num_sessions=1, sleep_after=3, browser=os.getenv("TIKTOK_BROWSER", "chromium"))
             user = api.user(f"{id}")
             videos=[]
             async for video in user.videos(count=count):
@@ -100,7 +111,7 @@ def tiktok_videos_scraper(id = "therock",count = 10):
             with open(Config.TIKTOK_FILE_PATH, "w",encoding='utf-8') as f:
                 for item in videos:
                     f.write(f"{item}\n")
-            batch_download_from_file(Config.TIKTOK_FILE_PATH)
+            batch_download_from_file(Config.TIKTOK_FILE_PATH, tiktok=True)
     asyncio.run(user_example())
 
 def fb_save_cookies():
@@ -112,8 +123,8 @@ if __name__ == "__main__":
 
     # fb_videos_scraper(id = "official.parkhangseo")
     # ins_videos_scraper(id = "baukrysie")
-    # x_videos_scraper(id = "elonmusk", scrolls=10)
-    tiktok_videos_scraper(id = "beatvn_official", count=10)
+    # x_videos_scraper(id = "BillGates", scrolls=10)
+    tiktok_videos_scraper(id = "kenh14official", count=2)
     # fb_save_cookies()
     # x_login()
 

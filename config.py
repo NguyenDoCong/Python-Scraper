@@ -19,6 +19,7 @@ class Config:
     # TikTok 
     TIKTOK_FILE_PATH = "scraped_data/tiktok.txt"
     TIKTOK_ERROR_FILE_PATH = "scraped_data/tiktok_error.txt"
+    MS_TOKENS = ['azquqBjM67uB1DOXOvXJuaQxP1vQD8Ez_a8kDxBXNDBbLFFRE4KWUDuX-l0OjQvpgbE_dYsreYMw739sg14g8lycqGHMkEzwuWRN-L0ldYWWGwWoYs4Gw8MDxAWhEscDMqFxCSFgB3ayJ_KUoLceFA==']
     # X 
     X_FILE_PATH = "scraped_data/x.txt"
     # facebook

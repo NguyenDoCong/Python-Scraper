@@ -1,17 +1,20 @@
 import os
-import sys
+# import sys
 import csv
 import time
 import json
-import shutil
+# import shutil
 import yt_dlp
 import logging
 import requests
-import instaloader
+# import instaloader
 from tqdm import tqdm
 from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from config import Config
+
+import sys
+sys.path.insert(1, 'src/utils')
 
 # ---------------------------------
 # Logging Setup
@@ -95,9 +98,13 @@ def get_unique_filename(filename):
         counter += 1
     return filename
 
-def batch_download_from_file(file_path):
+def batch_download_from_file(file_path, tiktok=False):
     """Read URLs from a text file and download them concurrently."""
     print(f"Reading URLs from {file_path}...")
+
+    import asyncio
+    from tqdm.asyncio import tqdm_asyncio
+    from download_tiktok import main as download_tiktok
 
     # Read all lines and clean up empty lines
     with open(file_path, "r") as file:
@@ -109,7 +116,14 @@ def batch_download_from_file(file_path):
 
     print("Starting batch download...")
 
-    with ThreadPoolExecutor() as executor:
+    if tiktok:
+
+        # async with TikTokApi() as api:
+        #     await api.create_sessions(ms_tokens=ms_tokens, num_sessions=1, sleep_after=3, browser=os.getenv("TIKTOK_BROWSER", "chromium"))
+        tasks = [download_tiktok(url) for url in urls]
+        tqdm_asyncio.gather(*tasks, desc="Facebook/Youtube/Tiktok/Instagram Batch")
+    else:
+        with ThreadPoolExecutor() as executor:
             list(
                 tqdm(
                     executor.map(download_video, urls),
@@ -124,13 +138,37 @@ def download_video(url):
     """Download a YouTube or TikTok video with user-selected format (ensuring video has audio)."""
     ensure_internet_connection()
     
+    id = url.split("/")[-1]
     try:        
         ydl_opts = {"listformats": True}
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-
-        id = info.get("id")
         ydl_opts = {
+            'nocheckcertificate': True,
+            'quiet': False,
+            # 'verbose': True,
+            # 'source_address': '0.0.0.0',
+            # 'postprocessors': [],
+            # 'concurrent_fragment_downloads': 3,
+            'http_headers': {
+                # Dòng này sẽ được tự động cấu hình đúng nếu dùng `--impersonate`, nhưng ta cũng có thể chỉ định thủ công nếu muốn
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36"
+            },
+            # 'compat_opts': ['client=youtube-web:Chrome'],  # chính là tương đương `--impersonate firefox`
+        }
+        # with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        #     info = ydl.extract_info(url, download=False)
+        #     print("-------------------------------------------------")
+
+        # id = info.get("id")
+        ydl_opts = {
+            # 'nocheckcertificate': True,
+            # 'quiet': False,
+            # 'verbose': True,
+            # 'source_address': '0.0.0.0',
+            # 'http_headers': {
+            #     # Dòng này sẽ được tự động cấu hình đúng nếu dùng `--impersonate`, nhưng ta cũng có thể chỉ định thủ công nếu muốn
+            #     # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
+            # },
+            # 'compat_opts': ['client=youtube-web:firefox'],  # chính là tương đương `--impersonate firefox`
             "format": "bestaudio/best",
             "outtmpl": os.path.join(download_directory, f"{id}"),
             "postprocessors": [
@@ -144,6 +182,7 @@ def download_video(url):
 
         # Download
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            # print("-------------------------------------------------")
             ydl.download([url])
             log_download(url, "Success")
             print(f"\n\033[1;32mDownloaded successfully:\033[0m {id}")
@@ -152,12 +191,20 @@ def download_video(url):
         log_download(url, f"Failed: {str(e)}")
         logging.error(f"Error downloading video from {url}: {str(e)}")
         print(f"\033[1;31mError downloading video:\033[0m {str(e)}")
-        
-        TIKTOK_ERROR_FILE_PATH = "scraped_data/tiktok_error.txt"
 
-        with open(TIKTOK_ERROR_FILE_PATH, "a") as error_file:
-            error_file.write(f"{url}\n")
-        print(f"Error logged in error.txt")
+        log_download(url, f"Download Error: {str(e)}")
+        print(f"\033[1;31mDownload Error:\033[0m {str(e)}")
+        
+        url = f"https://www.tikwm.com/video/music/{id}.mp3"
+        file = requests.get(url)
+        with open(f"{id}.mp3", "wb") as f:
+            f.write(file.content)
+        
+        # TIKTOK_ERROR_FILE_PATH = "scraped_data/tiktok_error.txt"
+
+        # with open(TIKTOK_ERROR_FILE_PATH, "a") as error_file:
+        #     error_file.write(f"{url}\n")
+        # print(f"Error logged in error.txt")
 
 if __name__ == "__main__":
-    download_video("https://www.tiktok.com/@beatvn_official/video/7486075232663440656")
+    download_video("https://www.tiktok.com/@theanh28entertainment/video/7496340302253362439")
